@@ -1,0 +1,14 @@
+$TTL 38400	; 10 hours 40 minutes
+@		IN SOA	ns.web1asir.int. igorrita.danielcastelao.org. (
+				20231009   ; serial
+				10800      ; refresh (3 hours)
+				3600       ; retry (1 hour)
+				604800     ; expire (1 week)
+				38400      ; minimum (10 hours 40 minutes)
+				)
+@		IN NS	ns.web1asir.int.
+ns		IN A 	172.28.0.40
+iago	IN A    10.0.9.5
+mario 	IN A 	10.0.9.4
+httpd1 	IN A	172.28.0.30
+httpd2  IN A    172.28.0.50

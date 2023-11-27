@@ -1,0 +1,79 @@
+services:
+  asir_web1:
+    image: httpd:2.4
+    ports:
+      - "58080:80"
+    volumes:
+      - ./paginas:/usr/local/apache2/htdocs
+      - ./conf:/usr/local/apache2/conf
+    container_name: asir_web1
+    networks:
+      network:
+        ipv4_address: 172.28.0.30
+  asir_web2:
+    image: httpd:2.4
+    ports:
+      - "58081:80"
+    volumes:
+      - ./paginas:/usr/local/apache2/htdocs
+      - ./conf:/usr/local/apache2/conf
+    container_name: asir_web2   
+    networks:
+      network:
+        ipv4_address: 172.28.0.50
+  bind9:
+    container_name: web_bind9
+    # usamos esta imagen para poder ver los logs
+    # la imagen de internetsystemconsoryum/bind9
+    # no muestra los logs
+    image: ubuntu/bind9
+    # especificamos la plataforma de la imagen
+    # es posible conflicto cuando el host es 'arm'
+    #ya que no existe una imagen para esa plataforma
+    platform: linux/amd64
+    networks:
+      network:
+        ipv4_address: 172.28.0.40
+      #Ip del DNS es 172.28.0.40, 
+      #será el que tendremos que poner en nuestro cliente
+    ports:
+      - '53:53/tcp'
+      - '53:53/udp'
+      #Nuestros puertos, tambien podrian ponerse '53:53'
+    volumes:
+      - ./dns/conf/:/etc/bind/
+      - ./dns/zones/:/var/lib/bind/
+      #Los volumenes están explicados en el readme
+  ubuntu:
+    container_name: asir_cliente
+    #nombre del equipo de nuestro cliente
+    image: ubuntu:latest
+    #Instalaremos la ultima imagen de ubuntu poniendole el latest
+    networks:
+      network: 
+        ipv4_address: 172.28.0.70
+        #la ip será 172.28.0.70
+    stdin_open: true # docker run -i
+    tty: true # docker run -t
+    dns:
+      - 172.28.0.40
+      # el dns de nuestro cliente será eñ 172.28.0.40, que corresponde a nuestro servidor DNS.
+  firefox:
+    container_name: asir_firefox
+    image: jlesage/firefox
+    ports:
+      - "5800:5800"
+    volumes:
+      - "./appdata/firefox:/config:rw"
+    networks:
+      network: 
+        ipv4_address: 172.28.0.80
+    dns:
+      - 172.28.0.40
+networks:
+  network:
+    ipam:
+      config:
+        - subnet: 172.28.0.0/24
+          gateway: 172.28.0.1
+  

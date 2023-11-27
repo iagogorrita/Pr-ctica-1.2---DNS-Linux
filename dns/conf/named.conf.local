@@ -1,0 +1,28 @@
+zone "web1asir.int" {
+	type master;
+	file "/var/lib/bind/db.web1asir.int";
+	allow-query {
+		any;
+		};
+	};
+zone "tiendadeelectronica.int" {
+	type master;
+	file "/var/lib/bind/db.tiendadeelectronica.int";
+	allow-query {
+		any;
+		};
+	};
+zone "fabulasoscuras.int" {
+	type master;
+	file "/var/lib/bind/db.fabulasoscuras.int";
+	allow-query {
+		any;
+		};
+	};
+zone "fabulasmaravillosas.int" {
+	type master;
+	file "/var/lib/bind/db.fabulasmaravillosas.int";
+	allow-query {
+		any;
+		};
+	};
